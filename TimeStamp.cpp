@@ -1,4 +1,4 @@
-#include "TimeStamp.h"
+#include "TimeStamp.hpp"
 
 
 TimeStampBuilder::TimeStampBuilder(NTPClient* ntp_client){
