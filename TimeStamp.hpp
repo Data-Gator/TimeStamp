@@ -23,7 +23,9 @@ class TimeStampBuilder {
         TimeStampBuilder(NTPClient*);
 
         std::string get_date_time();                                                        // use NTPClient
-        std::string get_date_time(std::string date, std::string time, std::string offset);  // build from strings
+        std::string get_date_time(std::string date, 
+                std::string time, 
+                std::string offset);  // build from strings
 
         std::string format_time(int hours, int minutes, int seconds);
         std::string format_date(unsigned long epoch_time);
@@ -45,6 +47,8 @@ class TimeStampParser {
     public:
 
         TimeStampParser(std::string timestamp);
+
+        std::string get_timestamp(void){return this->timestamp;}
 
         int get_day();
         int get_month();
