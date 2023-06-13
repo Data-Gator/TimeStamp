@@ -24,7 +24,7 @@ class TimeStamp {
         int offset;
 
         time_t epoch_time;
-        struct tm* ptm;
+        struct tm* ptm = new tm{0};
 
     public:
         TimeStamp(time_t epoch_time){
@@ -48,7 +48,6 @@ class TimeStamp {
 
         TimeStamp(int day, int month, int year, int hour, int minutes, int seconds, int offset){
             // convert to time since epoch
-            this->ptm = {0};  // Initalize to all 0's
             this->ptm->tm_year = year-1900;  // This is year-1900, so 112 = 2012
             this->ptm->tm_mon = month-1;
             this->ptm->tm_mday = day;
