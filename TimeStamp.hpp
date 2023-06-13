@@ -3,6 +3,7 @@
 #include <NTPClient.h>
 #include <WiFiUdp.h>
 #include <string>
+#include <ctime>
 
 using namespace std;
 
@@ -22,28 +23,48 @@ class TimeStamp {
 
         int offset;
 
-        long int epoch_time;
+        time_t epoch_time;
         struct tm* ptm;
 
     public:
-        TimeStamp(){};
         TimeStamp(time_t epoch_time){
+            // store
             this->epoch_time = epoch_time;
+
+            // convert to mm/dd/yy...etc
             this->ptm = gmtime ((time_t *)&epoch_time);
 
-            this->day = ptm->tm_mday;
-            this->month = ptm->tm_mon+1;
-            this->year = ptm->tm_year+1900;
+            this->day = this->ptm->tm_mday;
+            this->month = this->ptm->tm_mon+1;
+            this->year = this->ptm->tm_year+1900;
 
             // get hours, minutes, seconds
-            this->hour = ptm->tm_hour;
-            this->minutes = ptm->tm_min;
-            this->seconds = ptm->tm_sec;
+            this->hour = this->ptm->tm_hour;
+            this->minutes = this->ptm->tm_min;
+            this->seconds = this->ptm->tm_sec;
 
             this->offset = 0;
         }
 
-        TimeStamp(int day, int month, int year, int hour, int minutes, int seconds, int offset);
+        TimeStamp(int day, int month, int year, int hour, int minutes, int seconds, int offset){
+            // convert to time since epoch
+            this->ptm = {0};  // Initalize to all 0's
+            this->ptm->tm_year = year-1900;  // This is year-1900, so 112 = 2012
+            this->ptm->tm_mon = month-1;
+            this->ptm->tm_mday = day;
+            this->ptm->tm_hour = hour;
+            this->ptm->tm_min = minutes;
+            this->ptm->tm_sec = seconds;
+            this->epoch_time = std::mktime(ptm);
+
+            // store
+            this->day = day;
+            this->month = month;
+            this->year = year;
+            this->hour = hour;
+            this->minutes = minutes;
+            this->seconds = seconds;
+        }
 
         // get "mm/dd/yyThh:mm:ss+offset"
         string to_string(){
@@ -62,6 +83,25 @@ class TimeStamp {
             }
         }
 
+        friend bool operator> (const TimeStamp& l, const TimeStamp& r){
+            return r < l;
+        }
+
+        friend bool operator<= (const TimeStamp& l, const TimeStamp& r){
+            return !(r > l);
+        }
+
+        friend bool operator>= (const TimeStamp& l, const TimeStamp& r){
+            return !(l < r);
+        }
+
+        friend bool operator== (const TimeStamp& l, const TimeStamp& r){
+            return l.epoch_time == r.epoch_time;
+        }
+
+        friend bool operator!= (const TimeStamp& l, const TimeStamp& r){
+            return l.epoch_time != r.epoch_time;
+        }
 
 };
 
