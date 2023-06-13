@@ -12,31 +12,9 @@ std::string TimeStampBuilder::get_date_time(){
 
     //this->ntp_client.update();
     try{
-    time_t epochTime = this->ntp_client->getEpochTime();
-
-    // get day, month, year
-    struct tm* ptm = gmtime ((time_t *)&epochTime);
-    int month_day = ptm->tm_mday;
-    int current_month = ptm->tm_mon+1;
-    int current_year = ptm->tm_year+1900;
-
-    // get hours, minutes, seconds
-    int hours = ptm->tm_hour;
-    int minutes = ptm->tm_min;
-    int seconds = ptm->tm_sec;
-
-    int offset = 0;
-
-    return std::to_string(current_month) + "-" + 
-        std::to_string(month_day) + "-" + 
-        std::to_string(current_year) +
-        "T" + 
-        std::to_string(hours) + ":" + 
-        std::to_string(minutes) + ":" + 
-        std::to_string(seconds) + 
-        "+" + 
-        std::to_string(offset);
-
+        time_t epochTime = this->ntp_client->getEpochTime();
+        TimeStamp ts(epochTime);
+        return ts.to_string();
 
     }catch(...){
         Serial.println("ERROR WITH NTP UPDATE!!!");
