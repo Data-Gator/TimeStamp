@@ -91,7 +91,7 @@ TimeStamp::TimeStamp(int day, int month, int year, int hour, int minutes, int se
  * Get string in form "mm/dd/yyThh:mm:ss+offset"
  */
 string TimeStamp::to_string(){
-    return std::to_string(this->month) + "/" + std::to_string(this->day) + "/" + std::to_string(this->year) + "T" + 
+    return std::to_string(this->month) + "-" + std::to_string(this->day) + "-" + std::to_string(this->year) + "T" + 
         std::to_string(this->hour) + ":" + std::to_string(this->minutes) + ":" + std::to_string(this->seconds) + "+" + 
         std::to_string(this->offset);
 } 
